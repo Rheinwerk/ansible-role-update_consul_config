@@ -6,4 +6,4 @@
   pre_tasks:
     - file: name="/etc/consul.d" state=directory owner="root" group="root" mode="0755"
   roles:
-    - ansible-role-update-consul-config
+    - ansible-role-update_consul_config
