@@ -4,7 +4,7 @@ consul config update
 This role can be used to update a consul config, e. g. early in the
 startup process before the actual services runs.
 
-[![Build Status](https://travis-ci.org/Rheinwerk/ansible-role-update_consul_config?branch=master)](https://travis-ci.org/Rheinwerk/ansible-role-update_consul_config)
+[![Build Status](https://travis-ci.org/Rheinwerk/ansible-role-update_consul_config.svg?branch=master)](https://travis-ci.org/Rheinwerk/ansible-role-update_consul_config)
 
 Notice that it will not start the service and expects the program to be
 installed already.
