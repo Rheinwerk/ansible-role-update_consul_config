@@ -1,0 +1,8 @@
+{
+{% for s in _consul.services %}
+  "service":
+{{ s|to_nice_json(indent=2)|indent(width=4,indentfirst=True)}}{% if not loop.last %},
+{% endif %}
+
+{% endfor %}
+}

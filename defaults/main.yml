@@ -1,0 +1,51 @@
+# vim: ft=ansible:et:ts=2
+_consul:
+  config_dir: "/etc/consul.d"
+  service_name: "consul"
+  flags:
+    - "-syslog"
+  datacenter: "dc1"
+  domain: "consul"
+  data_dir: "/var/lib/consul"
+  cluster:
+    provider: "aws"
+    tag_key: "consul"
+    tag_value: "server"
+  crypto:
+    tls:
+      https_port: 8501
+      key_file:
+        name: "consul.key"
+        content_b64: "<vaulted_tls_key_file_content_base64>"
+      cert_file: "consul.crt"
+      ca_file: "/etc/ssl/certs/ca-certificates.crt"
+    gossip:
+      static_key_b64: "<vaulted_gossip_key_file_content_base64>"
+  services:
+    - name: "redis"
+      tags:
+        - "primary"
+        - "sampletag2"
+      port: 8080
+      enableTagOverride: false
+      checks:
+        - script: "/usr/local/bin/check_redis.py"
+          interval: "10s"
+    - name: "mysql"
+      id: "mysql-4711"
+      tags:
+        - "master"
+      port: 3306
+  checks:
+    - id: "api"
+      name: "HTTP API on port 5000"
+      http: "https://localhost:5000/health"
+      tls_skip_verify: true
+      method: "POST"
+      header:
+        "x-foo":
+          - "bar"
+          - "baz"
+      interval: "10s"
+      timeout: "1s"
+
