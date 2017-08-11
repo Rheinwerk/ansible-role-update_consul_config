@@ -1,41 +1,41 @@
 # vim: set ft=ansible:
 
 - name: Create Consul Data Directory
-  file: name="{{ _consul.data_dir }}" state=directory owner="consul" group="root" mode="0755"
+  file: name="{{ _consul.data_dir }}" state=directory owner="{{ _consul.user|default("consul") }}" group="root" mode="0755"
 
 - name: Create Consul Defaults File
   template: src="etc/default/consul.j2" dest="/etc/default/{{ _consul.service_name }}" owner="root" group="root" mode="0755"
 
 - name: Create Consul Configuration Files ... Main
-  template: src="etc/consul.d/{{ item }}.j2" dest="{{ _consul.config_dir }}/{{ item }}" owner="root" group="consul" mode="0640"
+  template: src="etc/consul.d/{{ item }}.j2" dest="{{ _consul.config_dir }}/{{ item }}" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640"
   with_items:
     - "main.json"
 
 - name: Create Consul Configuration Files ... Gossip Encryption
-  template: src="etc/consul.d/{{ item }}.j2" dest="{{ _consul.config_dir }}/{{ item }}" owner="root" group="consul" mode="0640"
+  template: src="etc/consul.d/{{ item }}.j2" dest="{{ _consul.config_dir }}/{{ item }}" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640"
   with_items:
     - "gossip-encrypt.json"
   when: _consul.crypto is defined and _consul.crypto.gossip is defined
 
 - block:
     - name: Create Consul TLS Key
-      copy: content="{{ _consul.crypto.tls.key_file.content_b64|b64decode }}" dest="{{ _consul.config_dir }}/{{ _consul.crypto.tls.key_file.name}}" mode="0640" owner="root" group="consul"
+      copy: content="{{ _consul.crypto.tls.key_file.content_b64|b64decode }}" dest="{{ _consul.config_dir }}/{{ _consul.crypto.tls.key_file.name}}" mode="0640" owner="root" group="{{ _consul.group|default("consul") }}"
 
     - name: Copy Consul TLS Certificate
-      copy: src="etc/consul-client.d/{{ _consul.crypto.tls.cert_file }}" dest="{{ _consul.config_dir }}/{{ _consul.crypto.tls.cert_file }}" mode="0644" owner="root" group="consul"
+      copy: src="etc/consul-client.d/{{ _consul.crypto.tls.cert_file }}" dest="{{ _consul.config_dir }}/{{ _consul.crypto.tls.cert_file }}" mode="0644" owner="root" group="{{ _consul.group|default("consul") }}"
 
     - name: Create Consul Configuration Files ... TLS
-      template: src="etc/consul.d/{{ item }}.j2" dest="{{ _consul.config_dir }}/{{ item }}" owner="root" group="consul" mode="0640"
+      template: src="etc/consul.d/{{ item }}.j2" dest="{{ _consul.config_dir }}/{{ item }}" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640"
       with_items:
         - "tls.json"
   when: _consul.crypto is defined and _consul.crypto.tls is defined
 
 - name: Create Consul Services Configuration
-  template: src="etc/consul.d/services.json.j2" dest="{{ _consul.config_dir }}/services.json" owner="root" group="consul" mode="0640"
+  template: src="etc/consul.d/services.json.j2" dest="{{ _consul.config_dir }}/services.json" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640"
   when: _consul.services is defined
 
 - name: Create Consul Checks Configuration
-  template: src="etc/consul.d/checks.json.j2" dest="{{ _consul.config_dir }}/checks.json" owner="root" group="consul" mode="0640"
+  template: src="etc/consul.d/checks.json.j2" dest="{{ _consul.config_dir }}/checks.json" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640"
   when: _consul.checks is defined
 
 

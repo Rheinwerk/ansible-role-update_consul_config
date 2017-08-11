@@ -1,5 +1,7 @@
 # vim: ft=ansible:et:ts=2
 _consul:
+  user: "root"
+  group: "root"
   config_dir: "/etc/consul.d"
   service_name: "consul"
   flags:
@@ -11,16 +13,16 @@ _consul:
     provider: "aws"
     tag_key: "consul"
     tag_value: "server"
-  crypto:
-    tls:
-      https_port: 8501
-      key_file:
-        name: "consul.key"
-        content_b64: "<vaulted_tls_key_file_content_base64>"
-      cert_file: "consul.crt"
-      ca_file: "/etc/ssl/certs/ca-certificates.crt"
-    gossip:
-      static_key_b64: "<vaulted_gossip_key_file_content_base64>"
+    #  crypto:
+    #    tls:
+    #      https_port: 8501
+    #      key_file:
+    #        name: "consul.key"
+    #        content_b64: "TXlUTFNLZXkK"
+    #      cert_file: "consul.crt"
+    #      ca_file: "/etc/ssl/certs/ca-certificates.crt"
+    #    gossip:
+    #      static_key_b64: "TXlHb3NzaXBLZXkxMjM0NQo="
   services:
     - name: "redis"
       tags:
