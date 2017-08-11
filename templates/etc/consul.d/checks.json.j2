@@ -1,8 +1,5 @@
 {
-{% for c in _consul.checks %}
-  "check":
-{{ c|to_nice_json(indent=2)|indent(width=4,indentfirst=True)}}{% if not loop.last %},
-{% endif %}
-
-{% endfor %}
+  checks:
+  {{ _consul.checks|to_nice_json(indent=2)|indent(width=2,indentfirst=False)}}
 }
+
