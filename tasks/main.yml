@@ -38,5 +38,9 @@
   template: src="etc/consul.d/checks.json.j2" dest="{{ _consul.config_dir }}/checks.json" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640" validate="consul validate %s"
   when: _consul.checks is defined
 
-
+- name: Create dnsmasq config to forward consul domain to agent
+  template: src="{{ item }}.j2" dest="/{{ item }}"
+  with_items:
+    - "etc/dnsmasq.d/consul-forward.conf"
+  when: _consul.use_dnsmasq_forwarding|default(no)
 
