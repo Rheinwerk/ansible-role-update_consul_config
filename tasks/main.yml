@@ -42,5 +42,5 @@
   template: src="{{ item }}.j2" dest="/{{ item }}"
   with_items:
     - "etc/dnsmasq.d/consul-forward.conf"
-  when: _consul.use_dnsmasq_forwarding|default("no")
+  when: _consul.use_dnsmasq_forwarding|default(false)
 

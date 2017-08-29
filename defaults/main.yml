@@ -9,7 +9,7 @@ _consul:
   datacenter: "dc1"
   domain: "consul"
   data_dir: "/var/lib/consul"
-  # use_dnsmasq_forwarding: "yes"
+  use_dnsmasq_forwarding: true
   cluster:
     provider: "aws"
     tag_key: "consul"
