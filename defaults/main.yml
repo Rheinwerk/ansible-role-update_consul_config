@@ -22,6 +22,7 @@ _consul:
     #        content_b64: "TXlUTFNLZXkK"
     #      cert_file: "consul.crt"
     #      ca_file: "/etc/ssl/certs/ca-certificates.crt"
+    #      cert_glob_file: "/etc/cert_globs"
     #    gossip:
     #      static_key_b64: "TXlHb3NzaXBLZXkxMjM0NQo="
   services:

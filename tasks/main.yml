@@ -28,6 +28,11 @@
       template: src="etc/consul.d/{{ item }}.j2" dest="{{ _consul.config_dir }}/{{ item }}" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640" validate="consul validate %s"
       with_items:
         - "tls.json"
+
+    - name: Add certificate location to glob file
+      lineinfile: dest="{{ _consul.crypto.tls.cert_glob_file }}" owner=root group=root mode=0644 create=yes line="{{ _consul.config_dir }}/{{ _consul.crypto.tls.cert_file }}"
+      when: _consul.crypto.tls.cert_glob_file is defined
+
   when: _consul.crypto is defined and _consul.crypto.tls is defined
 
 - name: Create Consul Services Configuration
