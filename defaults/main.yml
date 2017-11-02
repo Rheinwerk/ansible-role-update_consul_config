@@ -10,6 +10,9 @@ _consul:
   domain: "consul"
   data_dir: "/var/lib/consul"
   use_dnsmasq_forwarding: true
+  listen:
+    bind: "0.0.0.0"
+    client: "127.0.0.1"
   cluster:
     provider: "aws"
     tag_key: "consul"

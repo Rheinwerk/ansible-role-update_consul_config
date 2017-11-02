@@ -18,10 +18,7 @@ script
     . /etc/default/{{ _consul.service_name }}
   fi
 
-  # Get the public IP
-  BIND=`ip addr show eth0 | grep 'inet ' | awk '{ print substr($2,0,index($2,"/")-1) }'`
-
   # Run the agent
-  exec /usr/local/bin/consul agent -config-dir="{{ _consul.config_dir }}" -bind=$BIND ${CONSUL_FLAGS}
+  exec /usr/local/bin/consul agent -config-dir="{{ _consul.config_dir }}" -bind={{ _consul.listen.bind|default("0.0.0.0") }} -client={{ _consul.listen.client|default("127.0.0.1") }} ${CONSUL_FLAGS} -node=$(hostname -f)
 end script
 
