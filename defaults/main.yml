@@ -9,6 +9,9 @@ _consul:
   datacenter: "dc1"
   domain: "consul"
   data_dir: "/var/lib/consul"
+  metadata:
+    key1: "value"
+    key2: "value"
   use_dnsmasq_forwarding: true
   listen:
     bind: "0.0.0.0"

@@ -2,6 +2,12 @@
   "datacenter": "{{ _consul.datacenter }}",
   "domain": "{{ _consul.domain }}",
   "data_dir": "{{ _consul.data_dir }}",
+{% if _consul.metadata is defined %}
+  "node_meta": {
+    {% for k,v in _consul.metadata.iteritems() %}"{{ k }}": "{{ v }}"{% if not loop.last %},
+    {% endif %}{% endfor %}
+  },
+{% endif %}
   "log_level": "{{ _consul.log_level|default('INFO') }}",
   "retry_join_ec2": {
     "tag_key": "{{ _consul.cluster.tag_key }}",
