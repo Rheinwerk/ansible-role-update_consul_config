@@ -9,10 +9,9 @@
   },
 {% endif %}
   "log_level": "{{ _consul.log_level|default('INFO') }}",
-  "retry_join_ec2": {
-    "tag_key": "{{ _consul.cluster.tag_key }}",
-    "tag_value": "{{ _consul.cluster.tag_value }}"
-  }{% if _consul.crypto is defined and _consul.crypto.tls is defined %},
+  "retry_join": [
+    "provider=aws tag_key={{ _consul.cluster.tag_key }} tag_value={{ _consul.cluster.tag_value }}"
+  ]{% if _consul.crypto is defined and _consul.crypto.tls is defined %},
   "ports": {
     "https": {{ _consul.crypto.tls.https_port }}
   }
