@@ -27,7 +27,7 @@
       when: _consul.crypto.tls.key_file.content_b64 is not defined
 
     - name: Copy Consul TLS Certificate
-      copy: src="etc/consul-client.d/{{ _consul.crypto.tls.cert_file }}" dest="{{ _consul.config_dir }}/{{ _consul.crypto.tls.cert_file }}" mode="0644" owner="root" group="{{ _consul.group|default("consul") }}"
+      copy: src="etc/consul.d/{{ _consul.crypto.tls.cert_file }}" dest="{{ _consul.config_dir }}/{{ _consul.crypto.tls.cert_file }}" mode="0644" owner="root" group="{{ _consul.group|default("consul") }}"
 
     - name: Create Consul Configuration Files ... TLS
       template: src="etc/consul.d/{{ item }}.j2" dest="{{ _consul.config_dir }}/{{ item }}" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640" validate="consul validate %s"
