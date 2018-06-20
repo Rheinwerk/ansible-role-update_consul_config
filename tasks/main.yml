@@ -20,6 +20,11 @@
 - block:
     - name: Create Consul TLS Key
       copy: content="{{ _consul.crypto.tls.key_file.content_b64|b64decode }}" dest="{{ _consul.config_dir }}/{{ _consul.crypto.tls.key_file.name}}" mode="0640" owner="root" group="{{ _consul.group|default("consul") }}"
+      when: _consul.crypto.tls.key_file.content_b64 is defined
+
+    - name: Copy Consul TLS Key
+      copy: src="etc/consul.d/{{ _consul.crypto.tls.key_file.name}}" dest="{{ _consul.config_dir }}/{{ _consul.crypto.tls.key_file.name}}" mode="0640" owner="root" group="{{ _consul.group|default("consul") }}"
+      when: _consul.crypto.tls.key_file.content_b64 is not defined
 
     - name: Copy Consul TLS Certificate
       copy: src="etc/consul-client.d/{{ _consul.crypto.tls.cert_file }}" dest="{{ _consul.config_dir }}/{{ _consul.crypto.tls.cert_file }}" mode="0644" owner="root" group="{{ _consul.group|default("consul") }}"
