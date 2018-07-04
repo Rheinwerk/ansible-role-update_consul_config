@@ -16,6 +16,7 @@ install:
   # Install ansible
   - pip install ansible
   - pip install yamllint
+  - pip install yamllint
 
     # Check ansible version
   - ansible --version
@@ -25,6 +26,7 @@ install:
 
 script:
   - "find . -name '*.yml' -print0 | xargs -0 yamllint -c galaxy-yamllint.yaml "
+  - "find . -name '*.yml' -print0 | xargs -0 yamllint -c galaxy-yamllint.yaml"
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
   - cd tests; ./run_tests.sh
