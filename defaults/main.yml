@@ -58,4 +58,3 @@ _consul:
           - "baz"
       interval: "10s"
       timeout: "1s"
-

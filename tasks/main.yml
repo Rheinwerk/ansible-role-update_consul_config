@@ -60,4 +60,3 @@
       when: dnsmasq_consul|changed
 
   when: _consul.use_dnsmasq_forwarding|default(false)
-
