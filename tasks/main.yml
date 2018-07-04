@@ -57,6 +57,8 @@
 
     - name: Restart dnsmasq if config changed to enable consul queries
       service: name=dnsmasq state=restarted
-      when: dnsmasq_consul|changed
+      when: dnsmasq_consul is changed
 
   when: _consul.use_dnsmasq_forwarding|default(false)
+
+
