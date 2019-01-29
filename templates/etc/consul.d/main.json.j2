@@ -4,7 +4,7 @@
   "data_dir": "{{ _consul.data_dir }}",
 {% if _consul.metadata is defined %}
   "node_meta": {
-    {% for k,v in _consul.metadata.iteritems() %}"{{ k }}": "{{ v }}"{% if not loop.last %},
+    {% for k,v in _consul.metadata.items() %}"{{ k }}": "{{ v }}"{% if not loop.last %},
     {% endif %}{% endfor %}
   },
 {% endif %}
