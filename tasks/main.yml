@@ -50,7 +50,7 @@
 
 - block:
     - name: Create dnsmasq config to forward consul domain to agent
-      template: src="{{ item }}.j2" dest="/{{ item }}"
+      template: src="{{ item }}.j2" dest="/{{ item }}" mode=0644
       with_items:
         - "etc/dnsmasq.d/consul-forward.conf"
       register: dnsmasq_consul
