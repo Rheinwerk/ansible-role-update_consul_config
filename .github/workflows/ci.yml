@@ -28,11 +28,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Set up Python 3
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-
       - name: Install test dependencies
         run: pip install 'ansible${{ matrix.ansible-version }}' yamllint
 
