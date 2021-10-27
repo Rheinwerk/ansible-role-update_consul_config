@@ -11,13 +11,14 @@ on:
 jobs:
 
   lint:
-    name: Lint
-    runs-on: ubuntu-latest
+    name: CI for Ansible ${{ matrix.ansible-version }} / ${{ matrix.os }} / Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [ '3.7', '3.8' ]
         # Use latest patch versions
         ansible-version: [ '>=2.9, <2.10', '>=2.10, <2.11' ]
+        os: [ 'ubuntu-18.04', 'ubuntu-20.04' ]
+        python-version: [ '3.7', '3.8' ]
 
     steps:
       - name: Check out the codebase
@@ -28,9 +29,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install test dependencies
-        run: pip install 'ansible${{ matrix.ansible-version }}' yamllint
+      - name: Install Ansible ${{ matrix.ansible-version }}
+        run: pip install 'ansible${{ matrix.ansible-version }}'
 
+      # Yamllint ist bereits im Ubuntu Image enthalten: https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md
       - name: Check versions
         run: |
           ansible --version
