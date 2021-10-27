@@ -13,8 +13,8 @@ jobs:
   lint:
     name: CI for Ansible ${{ matrix.ansible-version }} / ${{ matrix.os }} / Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
-    fail-fast: false
     strategy:
+      fail-fast: false
       matrix:
         # Use latest patch versions
         ansible-version: [ '>=2.9, <2.10', '>=2.10, <2.11' ]
