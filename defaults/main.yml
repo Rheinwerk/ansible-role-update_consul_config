@@ -1,8 +1,14 @@
 # vim: ft=ansible:et:ts=2
+_consul_config_dir: "/etc/consul.d"
 _consul:
   user: "root"
   group: "root"
-  config_dir: "/etc/consul.d"
+  config_dir: "{{ _consul_config_dir }}"
+  daemon_args:
+    - "-config-dir={{ _consul_config_dir }}"
+    - "-bind=0.0.0.0"
+    - "-client=127.0.0.1"
+    - "-node={{ ansible_fqdn }}"
   service_name: "consul"
   flags:
     - "-syslog"
@@ -14,9 +20,6 @@ _consul:
     key2: "value"
   use_dnsmasq_forwarding: true
   allow_dnsmasq_restart: true
-  listen:
-    bind: "0.0.0.0"
-    client: "127.0.0.1"
   cluster:
     provider: "aws"
     tag_key: "consul"

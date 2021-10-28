@@ -1,4 +1,4 @@
 # Specify additional flags to be added to the command line
 
 CONSUL_FLAGS="{{ _consul.flags|join(" ") }}"
-DAEMON_ARGS="-config-dir={{ _consul.config_dir }}"
+DAEMON_ARGS="{{ _consul.daemon_args|join(" ") }}"
