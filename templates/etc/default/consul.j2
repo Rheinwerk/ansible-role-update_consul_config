@@ -1,4 +1,6 @@
 # Specify additional flags to be added to the command line
 
 CONSUL_FLAGS="{{ _consul.flags|join(" ") }}"
+# Nur SystemD Systeme nutzen die DAEMON_ARGS Variable. Unter Upstart wird diese nicht benötigt/benutzt
+# und kann komplett ignoriert werden. Prüfe ob Werte gesetzt sind.
 {% if _consul.daemon_args is defined %}DAEMON_ARGS="{{ _consul.daemon_args|join(" ")  }}"{% endif %}
