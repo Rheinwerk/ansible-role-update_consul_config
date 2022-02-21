@@ -7,12 +7,12 @@
   template: src="etc/default/consul.j2" dest="/etc/default/{{ _consul.service_name }}" owner="root" group="root" mode="0755"
 
 - name: Create Consul Configuration Files ... Main
-  template: src="etc/consul.d/{{ item }}.j2" dest="{{ _consul.config_dir }}/{{ item }}" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640" validate="consul validate %s"
+  template: src="etc/consul.d/{{ item }}.j2" dest="{{ _consul.config_dir }}/{{ item }}" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640"
   with_items:
     - "main.json"
 
 - name: Create Consul Configuration Files ... Gossip Encryption
-  template: src="etc/consul.d/{{ item }}.j2" dest="{{ _consul.config_dir }}/{{ item }}" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640" validate="consul validate %s"
+  template: src="etc/consul.d/{{ item }}.j2" dest="{{ _consul.config_dir }}/{{ item }}" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640"
   with_items:
     - "gossip-encrypt.json"
   when: _consul.crypto is defined and _consul.crypto.gossip is defined
@@ -30,7 +30,7 @@
       copy: src="etc/consul.d/{{ _consul.crypto.tls.cert_file }}" dest="{{ _consul.config_dir }}/{{ _consul.crypto.tls.cert_file }}" mode="0644" owner="root" group="{{ _consul.group|default("consul") }}"
 
     - name: Create Consul Configuration Files ... TLS
-      template: src="etc/consul.d/{{ item }}.j2" dest="{{ _consul.config_dir }}/{{ item }}" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640" validate="consul validate %s"
+      template: src="etc/consul.d/{{ item }}.j2" dest="{{ _consul.config_dir }}/{{ item }}" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640"
       with_items:
         - "tls.json"
 
@@ -41,11 +41,11 @@
   when: _consul.crypto is defined and _consul.crypto.tls is defined
 
 - name: Create Consul Services Configuration
-  template: src="etc/consul.d/services.json.j2" dest="{{ _consul.config_dir }}/services.json" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640" validate="consul validate %s"
+  template: src="etc/consul.d/services.json.j2" dest="{{ _consul.config_dir }}/services.json" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640"
   when: _consul.services is defined
 
 - name: Create Consul Checks Configuration
-  template: src="etc/consul.d/checks.json.j2" dest="{{ _consul.config_dir }}/checks.json" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640" validate="consul validate %s"
+  template: src="etc/consul.d/checks.json.j2" dest="{{ _consul.config_dir }}/checks.json" owner="root" group="{{ _consul.group|default("consul") }}" mode="0640"
   when: _consul.checks is defined
 
 - block:
@@ -79,3 +79,10 @@
         line: "OOMScoreAdjust={{ _consul.oom_score_adj }}"
         insertafter: "^[Service]"
   when: _consul.oom_score_adj is defined and ansible_service_mgr == "systemd"
+
+- name: Validate configuration
+  command:
+    argv:
+      - consul
+      - validate
+      - "{{ _consul.config_dir }}"
