@@ -83,6 +83,6 @@
 - name: Validate configuration
   command:
     argv:
-      - "/usr/local/bin/consul"
-      - "validate"
+      - consul
+      - validate
       - "{{ _consul.config_dir }}"
