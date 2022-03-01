@@ -79,10 +79,3 @@
         line: "OOMScoreAdjust={{ _consul.oom_score_adj }}"
         insertafter: "^[Service]"
   when: _consul.oom_score_adj is defined and ansible_service_mgr == "systemd"
-
-- name: Validate configuration
-  command:
-    argv:
-      - consul
-      - validate
-      - "{{ _consul.config_dir }}"
