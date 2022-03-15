@@ -3,6 +3,9 @@
   "domain": "{{ _consul.domain }}",
   "data_dir": "{{ _consul.data_dir }}",
   "enable_local_script_checks": true,
+  "dns_config": {
+    "enable_additional_node_meta_txt": false
+  },
 {% if _consul.metadata is defined %}
   "node_meta": {
     {% for k,v in _consul.metadata.items() %}"{{ k }}": "{{ v }}"{% if not loop.last %},
