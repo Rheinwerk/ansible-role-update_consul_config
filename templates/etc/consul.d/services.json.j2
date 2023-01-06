@@ -1,5 +1,4 @@
 {
   "services":
-  {{ _consul.services|to_nice_json(indent=2)|indent(width=2,indentfirst=False)}}
+  {{ _consul.services|to_nice_json(indent=2)|indent(width=2,first=False)}}
 }
-
