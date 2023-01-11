@@ -122,25 +122,11 @@
         state: restarted
       when: dnsmasq_consul is changed and _consul.allow_dnsmasq_restart | default(true)
 
-  when: _consul.use_dnsmasq_forwarding | default(false)
-
-- name: OOM Score config upstart
-  block:
-    - name: Set oom score for consul client in upstart
-      lineinfile:
-        dest: "/etc/init/{{ _consul.service_name }}.conf"
-        state: present
-        regexp: '^oom score'
-        line: "oom score {{ _consul.oom_score_adj }}"
-  when: _consul.oom_score_adj is defined and ansible_service_mgr == "upstart"
-
-- name: OOM Score config systemd
-  block:
-    - name: Set oom score for consul client in systemd
-      lineinfile:
-        dest: "/etc/systemd/system/{{ _consul.service_name }}.service"
-        state: present
-        regexp: '^OOMScoreAdjust='
-        line: "OOMScoreAdjust={{ _consul.oom_score_adj }}"
-        insertafter: "^[Service]"
-  when: _consul.oom_score_adj is defined and ansible_service_mgr == "systemd"
+- name: Set oom score for consul client in systemd
+  lineinfile:
+    dest: "/etc/systemd/system/{{ _consul.service_name }}.service"
+    state: present
+    regexp: '^OOMScoreAdjust='
+    line: "OOMScoreAdjust={{ _consul.oom_score_adj }}"
+    insertafter: "^[Service]"
+  when: _consul.oom_score_adj is defined
