@@ -38,6 +38,7 @@
   when: _consul.crypto is defined and _consul.crypto.gossip is defined
 
 - name: Configure Consul crypto
+  when: _consul.crypto is defined and _consul.crypto.tls is defined
   block:
     - name: Create Consul TLS Key
       copy:
@@ -85,8 +86,6 @@
         line: "{{ _consul.config_dir }}/{{ _consul.crypto.tls.cert_file }}"
       when: _consul.crypto.tls.cert_glob_file is defined
 
-  when: _consul.crypto is defined and _consul.crypto.tls is defined
-
 - name: Create Consul Services Configuration
   template:
     src: "etc/consul.d/services.json.j2"
@@ -106,6 +105,7 @@
   when: _consul.checks is defined
 
 - name: Configure DNSmasq forwarding
+  when: _consul.use_dnsmasq_forwarding | default(false)
   block:
     - name: Create dnsmasq config to forward consul domain to agent
       template:
