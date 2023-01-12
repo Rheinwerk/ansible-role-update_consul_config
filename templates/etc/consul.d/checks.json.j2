@@ -1,5 +1,4 @@
 {
   "checks":
-  {{ _consul.checks|to_nice_json(indent=2)|indent(width=2,indentfirst=False)}}
+  {{ _consul.checks|to_nice_json(indent=2)|indent(width=2,first=False)}}
 }
-
