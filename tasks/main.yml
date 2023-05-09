@@ -1,7 +1,7 @@
 # vim: set ft=ansible:
 
 - name: Create Consul Data Directory
-  file:
+  ansible.builtin.file:
     name: "{{ _consul.data_dir }}"
     state: directory
     owner: '{{ _consul.user | default("consul") }}'
@@ -9,7 +9,7 @@
     mode: "0755"
 
 - name: Create Consul Defaults File
-  template:
+  ansible.builtin.template:
     src: "etc/default/consul.j2"
     dest: "/etc/default/{{ _consul.service_name }}"
     owner: "root"
@@ -17,7 +17,7 @@
     mode: "0755"
 
 - name: Create Consul Configuration Files ... Main
-  template:
+  ansible.builtin.template:
     src: "etc/consul.d/{{ item }}.j2"
     dest: "{{ _consul.config_dir }}/{{ item }}"
     owner: "root"
@@ -27,7 +27,7 @@
     - "main.json"
 
 - name: Create Consul Configuration Files ... Gossip Encryption
-  template:
+  ansible.builtin.template:
     src: "etc/consul.d/{{ item }}.j2"
     dest: "{{ _consul.config_dir }}/{{ item }}"
     owner: "root"
@@ -41,7 +41,7 @@
   when: _consul.crypto is defined and _consul.crypto.tls is defined
   block:
     - name: Create Consul TLS Key
-      copy:
+      ansible.builtin.copy:
         content: "{{ _consul.crypto.tls.key_file.content_b64 | b64decode }}"
         dest: "{{ _consul.config_dir }}/{{ _consul.crypto.tls.key_file.name }}"
         mode: "0640"
@@ -50,7 +50,7 @@
       when: _consul.crypto.tls.key_file.content_b64 is defined
 
     - name: Copy Consul TLS Key
-      copy:
+      ansible.builtin.copy:
         src: "etc/consul.d/{{ _consul.crypto.tls.key_file.name }}"
         dest: "{{ _consul.config_dir }}/{{ _consul.crypto.tls.key_file.name }}"
         mode: "0640"
@@ -59,7 +59,7 @@
       when: _consul.crypto.tls.key_file.content_b64 is not defined
 
     - name: Copy Consul TLS Certificate
-      copy:
+      ansible.builtin.copy:
         src: "etc/consul.d/{{ _consul.crypto.tls.cert_file }}"
         dest: "{{ _consul.config_dir }}/{{ _consul.crypto.tls.cert_file }}"
         mode: "0644"
@@ -67,7 +67,7 @@
         group: '{{ _consul.group | default("consul") }}'
 
     - name: Create Consul Configuration Files ... TLS
-      template:
+      ansible.builtin.template:
         src: "etc/consul.d/{{ item }}.j2"
         dest: "{{ _consul.config_dir }}/{{ item }}"
         owner: "root"
@@ -77,7 +77,7 @@
         - "tls.json"
 
     - name: Add certificate location to glob file
-      lineinfile:
+      ansible.builtin.lineinfile:
         dest: "{{ _consul.crypto.tls.cert_glob_file }}"
         owner: root
         group: root
@@ -87,7 +87,7 @@
       when: _consul.crypto.tls.cert_glob_file is defined
 
 - name: Create Consul Services Configuration
-  template:
+  ansible.builtin.template:
     src: "etc/consul.d/services.json.j2"
     dest: "{{ _consul.config_dir }}/services.json"
     owner: "root"
@@ -96,7 +96,7 @@
   when: _consul.services is defined
 
 - name: Create Consul Checks Configuration
-  template:
+  ansible.builtin.template:
     src: "etc/consul.d/checks.json.j2"
     dest: "{{ _consul.config_dir }}/checks.json"
     owner: "root"
@@ -108,7 +108,7 @@
   when: _consul.use_dnsmasq_forwarding | default(false)
   block:
     - name: Create dnsmasq config to forward consul domain to agent
-      template:
+      ansible.builtin.template:
         src: "{{ item }}.j2"
         dest: "/{{ item }}"
         mode: 0644
@@ -117,13 +117,13 @@
       register: dnsmasq_consul
 
     - name: Restart dnsmasq if config changed to enable consul queries
-      service:
+      ansible.builtin.service:
         name: dnsmasq
         state: restarted
       when: dnsmasq_consul is changed and _consul.allow_dnsmasq_restart | default(true)
 
 - name: Set oom score for consul client in systemd
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "/etc/systemd/system/{{ _consul.service_name }}.service"
     state: present
     regexp: '^OOMScoreAdjust='
