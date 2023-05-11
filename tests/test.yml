@@ -4,9 +4,9 @@
   become: yes
   become_user: root
   pre_tasks:
-    - file: name="/etc/consul.d" state=directory owner="root" group="root" mode="0755"
-    - file: name="/etc/dnsmasq.d" state=directory owner="root" group="root" mode="0755"
-    - file: src="/bin/true" dest="/usr/bin/consul" state=link owner=root group=root mode=0755
-    - apt: pkg=dnsmasq state=present
+    - ansible.builtin.file: name="/etc/consul.d" state=directory owner="root" group="root" mode="0755"
+    - ansible.builtin.file: name="/etc/dnsmasq.d" state=directory owner="root" group="root" mode="0755"
+    - ansible.builtin.file: src="/bin/true" dest="/usr/bin/consul" state=link owner=root group=root mode=0755
+    - ansible.builtin.apt: pkg=dnsmasq state=present
   roles:
     - ansible-role-update_consul_config
