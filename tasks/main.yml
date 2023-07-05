@@ -8,13 +8,15 @@
     group: "root"
     mode: "0755"
 
-- name: Create Consul Defaults File
+- name: Create Consul env File
   ansible.builtin.template:
-    src: "etc/default/consul.j2"
-    dest: "/etc/default/{{ _consul.service_name }}"
+    src: "etc/consul.d/{{ item }}.j2"
+    dest: "{{ _consul.config_dir }}/{{ item }}"
     owner: "root"
     group: "root"
     mode: "0755"
+  with_items:
+    - "consul.env"
 
 - name: Create Consul Configuration Files ... Main
   ansible.builtin.template:
@@ -130,3 +132,5 @@
     line: "OOMScoreAdjust={{ _consul.oom_score_adj }}"
     insertafter: "^[Service]"
   when: _consul.oom_score_adj is defined
+  notify:
+    - Reload SystemD configs

@@ -2,6 +2,24 @@
   "datacenter": "{{ _consul.datacenter }}",
   "domain": "{{ _consul.domain }}",
   "data_dir": "{{ _consul.data_dir }}",
+{% if _consul.bind_addr is defined %}
+  "bind_addr": "{{ _consul.bind_addr }}",
+{% endif %}
+{% if _consul.client_addr is defined %}
+  "client_addr": "{{ _consul.client_addr }}",
+{% endif %}
+{% if _consul.node_name is defined %}
+  "node_name": "{{ _consul.node_name }}",
+{% endif %}
+{% if _consul.server is defined %}
+  "server": {{ _consul.server | lower }},
+{% endif %}
+{% if _consul.raft_protocol is defined %}
+  "raft_protocol": {{ _consul.raft_protocol }},
+{% endif %}
+{% if _consul.ui is defined %}
+  "ui": {{ _consul.ui  | lower }},
+{% endif %}
   "enable_local_script_checks": true,
   "dns_config": {
     "enable_additional_node_meta_txt": false
