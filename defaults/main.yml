@@ -4,11 +4,9 @@ _consul:
   user: "root"
   group: "root"
   config_dir: "{{ CONSUL_CONFIG_DIR }}"
-  daemon_args:
-    - "-config-dir={{ CONSUL_CONFIG_DIR }}"
-    - "-bind=0.0.0.0"
-    - "-client=127.0.0.1"
-    - "-node={{ ansible_fqdn }}"
+  bind_addr: 0.0.0.0
+  client_addr: 127.0.0.1
+  node_name: "{{ ansible_fqdn }}"
   service_name: "consul"
   flags:
     - "-syslog"
