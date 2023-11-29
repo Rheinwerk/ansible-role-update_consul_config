@@ -18,7 +18,9 @@
   "raft_protocol": {{ _consul.raft_protocol }},
 {% endif %}
 {% if _consul.ui is defined %}
-  "ui": {{ _consul.ui  | lower }},
+  "ui_config": {
+    "enabled": {{ _consul.ui  | lower }}
+  },
 {% endif %}
   "enable_local_script_checks": true,
   "dns_config": {

@@ -1,8 +1,14 @@
 {
-  "verify_outgoing": {{ _consul.crypto.tls.verify_outgoing|default("true") }},
-  "verify_server_hostname": {{ _consul.crypto.tls.verify_server_hostname|default("true") }},
-  "verify_incoming": {{ _consul.crypto.tls.verify_incoming|default("true") }},
-  "ca_file": "{{ _consul.crypto.tls.ca_file }}",
-  "cert_file": "{{ _consul.config_dir}}/{{ _consul.crypto.tls.cert_file }}",
-  "key_file": "{{ _consul.config_dir}}/{{ _consul.crypto.tls.key_file.name }}"
+  "tls": {
+    "defaults": {
+      "ca_file": "{{ _consul.crypto.tls.ca_file }}",
+      "cert_file": "{{ _consul.config_dir}}/{{ _consul.crypto.tls.cert_file }}",
+      "key_file": "{{ _consul.config_dir}}/{{ _consul.crypto.tls.key_file.name }}",
+      "verify_incoming": {{ _consul.crypto.tls.verify_incoming|default("true") }},
+      "verify_outgoing": {{ _consul.crypto.tls.verify_outgoing|default("true") }}
+      },
+    "internal_rpc": {
+      "verify_server_hostname": {{ _consul.crypto.tls.verify_server_hostname|default("true") }}
+      }
+  }
 }
