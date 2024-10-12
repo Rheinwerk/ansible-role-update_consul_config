@@ -1,0 +1,23 @@
+[Unit]
+Description="HashiCorp Consul"
+Documentation=https://www.consul.io/
+Requires=network-online.target
+After=network-online.target
+ConditionFileNotEmpty={{ _consul.config_dir }}/main.json
+
+[Service]
+User=consul
+Group=consul
+# 'EnvironmentFile' Definition überschreiben 'Environment'
+EnvironmentFile=-{{ _consul.config_dir }}/consul.env
+ExecStart=/usr/local/bin/consul agent -config-dir={{ _consul.config_dir }} $CONSUL_FLAGS
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+LimitNOFILE=65536
+# Es wird explizit "append" statt "file" genutzt, da ansonsten nach dem Logrotate binäre Zeichenketten
+# "@^@^@^@^.." im Logfile entstehen, siehe auch: https://github.com/CenterDevice/ops/issues/262
+StandardOutput=append:{{ _consul.logfile }}
+StandardError=inherit
+
+[Install]
+WantedBy=multi-user.target

@@ -16,8 +16,8 @@ _consul:
   metadata:
     key1: "value"
     key2: "value"
-  use_dnsmasq_forwarding: true
-  allow_dnsmasq_restart: true
+  use_dns_forwarding: true
+  allow_resolver_restart: true
   cluster:
     provider: "aws"
     tag_key: "consul"

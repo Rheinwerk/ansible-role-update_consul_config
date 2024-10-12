@@ -106,23 +106,30 @@
     mode: "0640"
   when: _consul.checks is defined
 
-- name: Configure DNSmasq forwarding
-  when: _consul.use_dnsmasq_forwarding | default(false)
+- name: Systemd-resolved forwarding
+  when: _consul.use_dns_forwarding | default(false)
   block:
-    - name: Create dnsmasq config to forward consul domain to agent
+    - name: Create /etc/systemd/resolved.conf.d/
+      ansible.builtin.file:
+        path: /etc/systemd/resolved.conf.d/
+        state: directory
+        owner: root
+        group: root
+
+    - name: Create systemd-resolved config to forward consul domain to agent
       ansible.builtin.template:
         src: "{{ item }}.j2"
-        dest: "/{{ item }}"
-        mode: 0644
-      with_items:
-        - "etc/dnsmasq.d/consul-forward.conf"
-      register: dnsmasq_consul
+        dest: /{{ item }}
+        mode: "0644"
+      loop:
+        - etc/systemd/resolved.conf.d/consul.conf
+      register: systemd_resolved_consul
 
-    - name: Restart dnsmasq if config changed to enable consul queries
-      ansible.builtin.service:
-        name: dnsmasq
+    - name: Restart systemd-resolved
+      ansible.builtin.systemd:
+        name: systemd-resolved
         state: restarted
-      when: dnsmasq_consul is changed and _consul.allow_dnsmasq_restart | default(true)
+      when: systemd_resolved_consul is changed and _consul.allow_resolver_restart | default(true)
 
 - name: Set oom score for consul client in systemd
   ansible.builtin.lineinfile:
