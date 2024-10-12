@@ -124,6 +124,28 @@
         state: restarted
       when: dnsmasq_consul is changed and _consul.allow_dnsmasq_restart | default(true)
 
+- name: Systemd-resolved forwarding
+  when: _consul.use_resolved_forwarding | default(false)
+  block:
+    - name: Configure systemd-resolved
+      community.general.ini_file:
+        path: /etc/systemd/resolved.conf.d/consul.conf
+        section: "Resolve"
+        option: "{{ item.key }}"
+        value: "{{ item.value }}"
+        state: present
+        mode: '0644'
+      loop:
+        - { key: DNS, value: "127.0.0.1:{{ _consul.dns_port | default(8600) }}" }
+        - { key: Domains, value: "~{{ _consul.domain }}" }
+      register: systemd_resolved_consul
+
+    - name: Restart systemd-resolved
+      ansible.builtin.systemd:
+        name: systemd-resolved
+        state: restarted
+      when: systemd_resolved_consul is changed and _consul.allow_resolved_restart | default(true)
+
 - name: Set oom score for consul client in systemd
   ansible.builtin.lineinfile:
     dest: "/etc/systemd/system/{{ _consul.service_name }}.service"
