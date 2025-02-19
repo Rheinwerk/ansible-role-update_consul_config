@@ -1,0 +1,6 @@
+---
+# skip idempotence tests
+- name: Include Consul install role
+  ansible.builtin.include_role:
+    name: consul
+  when: "'molecule-idempotence-notest' not in ansible_skip_tags"
