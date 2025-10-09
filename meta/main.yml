@@ -1,7 +1,6 @@
 ---
 galaxy_info:
-  author: Daniel Schneller
-  namespace: rheinwerk
+  author: rheinwerk
   role_name: scollector
   description: Configures Consul
   company: Rheinwerk
