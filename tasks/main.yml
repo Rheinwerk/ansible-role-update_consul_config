@@ -83,7 +83,7 @@
         dest: "{{ _consul.crypto.tls.cert_glob_file }}"
         owner: root
         group: root
-        mode: 0644
+        mode: "0644"
         create: yes
         line: "{{ _consul.config_dir }}/{{ _consul.crypto.tls.cert_file }}"
       when: _consul.crypto.tls.cert_glob_file is defined
@@ -113,7 +113,7 @@
       ansible.builtin.template:
         src: "{{ item }}.j2"
         dest: "/{{ item }}"
-        mode: 0644
+        mode: "0644"
       with_items:
         - "etc/dnsmasq.d/consul-forward.conf"
       register: dnsmasq_consul
