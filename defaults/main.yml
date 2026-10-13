@@ -6,7 +6,7 @@ _consul:
   config_dir: "{{ CONSUL_CONFIG_DIR }}"
   bind_addr: 0.0.0.0
   client_addr: 127.0.0.1
-  node_name: "{{ ansible_fqdn }}"
+  node_name: "{{ ansible_facts['fqdn'] }}"
   service_name: "consul"
   flags:
     - "-syslog"
