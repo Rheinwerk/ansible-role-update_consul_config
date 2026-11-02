@@ -1,7 +1,11 @@
 {
   "tls": {
     "defaults": {
+{% if _consul.crypto.tls.ca_path is defined %}
+      "ca_path": "{{ _consul.crypto.tls.ca_path }}",
+{% else %}
       "ca_file": "{{ _consul.crypto.tls.ca_file }}",
+{% endif %}
       "cert_file": "{{ _consul.config_dir}}/{{ _consul.crypto.tls.cert_file }}",
       "key_file": "{{ _consul.config_dir}}/{{ _consul.crypto.tls.key_file.name }}",
       "verify_incoming": {{ _consul.crypto.tls.verify_incoming|default("true") }},
