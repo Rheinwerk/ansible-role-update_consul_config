@@ -29,6 +29,9 @@ _consul:
     #        name: "consul.key"
     #        content_b64: "TXlUTFNLZXkK"
     #      cert_file: "consul.crt"
+    #      # ca_path wins over ca_file. Consul reads every file below it, also in
+    #      # subdirectories, trusts them all, and will not start on a non-PEM file.
+    #      ca_path: "/usr/local/share/ca-certificates"
     #      ca_file: "/etc/ssl/certs/ca-certificates.crt"
     #      cert_glob_file: "/etc/cert_globs"
     #    gossip:
